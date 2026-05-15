@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+
+  backend:
+    build: ./Salary-Management-backend
+    container_name: Salary-Management-FastAPI
+    ports:
+      - 5000:5000
+    environment:
+    - DATABASE_URL=postgresql://admin:admin@pgbouncer:6432/prod_DB
+    - FRONTEND_URL=["http://localhost","http://127.0.0.1","http://frontend:3000"]
+    - DATABASE_URL_ALEMBIC=postgresql+psycopg2://admin:admin@pgbouncer:6432/prod_DB
+    - BACKEND_CORS_ORIGINS=["http://localhost:3000","http://127.0.0.1:3000","http://frontend:3000"]
+    # Uncomment volume below if you want to use local code changes without rebuilding the image as well as to get migration file in folder
+    volumes:
+      - ./Salary-Management-backend:/app
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 5000
+    depends_on:
+      - db
+      - pgbouncer
+    links:
+      - db
+
+  frontend:
+    build: ./salary-management-frontend
+    container_name: Salary-Management-Frontend
+    ports:
+      - 3000:3000
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:5000
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:16.2
+    hostname: SMPostgres
+    container_name: SMPostgres
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=prod_DB
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  pgbouncer:
+    # image: edoburu/pgbouncer:latest
+    build: ./pgbouncer
+    hostname: PGBouncerSM
+    container_name: PGBouncerSM
+    # environment:
+    #   - DB_HOST=db
+    #   - DB_PORT=5432
+    #   - DB_USER=admin
+    #   - DB_PASSWORD=admin
+    #   - ADMIN_USERS=postgres,admin
+    #   - LISTEN_PORT=6432     
+    #   - DB_NAME=*
+    #   - AUTH_TYPE=scram-sha-256
+    ports:
+      - "6432:6432"
+    depends_on:
+      - db
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: SMPgAdmin4
+    # restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: apote@sm.com
+      PGADMIN_DEFAULT_PASSWORD: apote
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - db
+
+  
+
+  # smdataprocessing:
+  #   build: ./SM-data-processing
+  #   container_name: SM_Data-Processing
+  #   environment:
+  #   - DATABASE_URL=postgresql://admin:admin@PGBouncerSM:6432/prod_DB
+  #   - DATABASE_HOST=db
+  #   - DATABASE_PORT=5432
+  #   - DATABASE_DB=prod_DB
+  #   - DATABASE_USER=admin
+  #   - DATABASE_PASSWORD=admin
+  #   # volumes:
+  #   #   - ./iot-data-processing:/app
+  #   depends_on:
+  #     - db
+  #   links:
+  #     - db
+
+volumes:
+  postgres_data:
+  local_pgdata:
+  pgadmin-data:
