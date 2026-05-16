@@ -48,3 +48,11 @@ class EmployeeResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class PaginatedEmployeesResponse(BaseModel):
+    data: list[EmployeeResponse]
+    total: int
+    page: int
+    limit: int
+    total_pages: int
