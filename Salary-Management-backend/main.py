@@ -1,31 +1,18 @@
 import uvicorn
 from fastapi import HTTPException, status, APIRouter, Response, Request, Depends
-from pydantic import BaseModel
 from datetime import datetime, timedelta
 import jwt
 from passlib.context import CryptContext
 
 from appSettings import *
 from models import User
+from models.schema import LoginRequest, SignupRequest, LoginResponse
+from employees import router as employees_router
 from sqlalchemy.orm import Session
 
 router = APIRouter()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-class LoginRequest(BaseModel):
-    username: str
-    password: str
-
-class SignupRequest(BaseModel):
-    username: str
-    password: str
-    name: str
-
-class LoginResponse(BaseModel):
-    access_token: str
-    token_type: str
-    user: dict
 
 SECRET_KEY = "your-secret-key-change-in-production"
 ALGORITHM = "HS256"
@@ -133,6 +120,7 @@ async def get_current_user(request: Request):
         raise HTTPException(status_code=401, detail="Invalid token")
 
 app.include_router(router)
+app.include_router(employees_router)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=5000, reload=True)
