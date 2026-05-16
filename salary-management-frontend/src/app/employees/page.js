@@ -49,15 +49,23 @@ export default function EmployeesPage() {
     date_of_birth: "",
     date_of_joining: "",
   });
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
-    fetchEmployees();
-  }, []);
+    fetchEmployees(page);
+  }, [page]);
 
-  const fetchEmployees = async () => {
+  const fetchEmployees = async (pageNum = 1) => {
+    setIsLoading(true);
     try {
-      const data = await fetchAPI("/api/employees");
-      setEmployees(data);
+      const data = await fetchAPI(`/api/employees?page=${pageNum}&limit=${limit}`);
+      setEmployees(data.data);
+      setTotal(data.total);
+      setTotalPages(data.total_pages);
+      setPage(data.page);
     } catch (error) {
       console.error("Failed to fetch employees:", error);
     } finally {
@@ -104,7 +112,7 @@ export default function EmployeesPage() {
         date_of_birth: "",
         date_of_joining: "",
       });
-      fetchEmployees();
+      fetchEmployees(page);
     } catch (error) {
       console.error("Failed to save employee:", error);
       alert(error.message);
@@ -131,7 +139,7 @@ export default function EmployeesPage() {
     if (!confirm("Are you sure you want to delete this employee?")) return;
     try {
       await fetchAPI(`/api/employees/${id}`, { method: "DELETE" });
-      fetchEmployees();
+      fetchEmployees(page);
     } catch (error) {
       console.error("Failed to delete employee:", error);
       alert(error.message);
@@ -230,7 +238,7 @@ export default function EmployeesPage() {
       <Card>
         <CardHeader>
           <CardTitle>Employee List</CardTitle>
-          <CardDescription>Total: {employees.length} employees</CardDescription>
+          <CardDescription>Showing {employees.length} of {total} employees (Page {page} of {totalPages})</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
@@ -271,6 +279,17 @@ export default function EmployeesPage() {
                 )}
               </tbody>
             </table>
+          </div>
+          <div className="flex items-center justify-between mt-4">
+            <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+              Previous
+            </Button>
+            <span className="text-sm text-muted-foreground">
+              Page {page} of {totalPages}
+            </span>
+            <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage(page + 1)}>
+              Next
+            </Button>
           </div>
         </CardContent>
       </Card>
