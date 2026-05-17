@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700">
+  <defs>
+    <style>
+      .box { fill: #f8fafc; stroke: #334155; stroke-width: 2; rx: 8; }
+      .client { fill: #e0f2fe; stroke: #0284c7; stroke-width: 2; rx: 8; }
+      .service { fill: #dcfce7; stroke: #16a34a; stroke-width: 2; rx: 8; }
+      .db { fill: #fef3c7; stroke: #d97706; stroke-width: 2; rx: 8; }
+      .admin { fill: #f3e8ff; stroke: #9333ea; stroke-width: 2; rx: 8; }
+      .arrow { stroke: #64748b; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .label { font-family: system-ui, sans-serif; font-size: 12px; fill: #1e293b; }
+      .title { font-family: system-ui, sans-serif; font-size: 20px; font-weight: bold; fill: #0f172a; }
+      .subtitle { font-family: system-ui, sans-serif; font-size: 11px; fill: #64748b; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="700" fill="#f1f5f9"/>
+
+  <text x="450" y="35" text-anchor="middle" class="title">Salary Management System - Architecture</text>
+
+  <!-- Browser -->
+  <rect x="50" y="80" width="130" height="70" class="client"/>
+  <text x="115" y="108" text-anchor="middle" class="label" font-weight="bold" font-size="14">Browser</text>
+  <text x="115" y="128" text-anchor="middle" class="subtitle">User Access</text>
+
+  <!-- Frontend -->
+  <rect x="230" y="70" width="160" height="100" class="box"/>
+  <text x="310" y="95" text-anchor="middle" class="label" font-weight="bold" font-size="14">Frontend</text>
+  <text x="310" y="115" text-anchor="middle" class="subtitle">Next.js 16</text>
+  <text x="310" y="130" text-anchor="middle" class="subtitle">React 19</text>
+  <text x="310" y="145" text-anchor="middle" class="subtitle">Tailwind CSS</text>
+
+  <path d="M180 115 L230 115" class="arrow"/>
+
+  <!-- API -->
+  <rect x="440" y="70" width="160" height="100" class="service"/>
+  <text x="520" y="95" text-anchor="middle" class="label" font-weight="bold" font-size="14">API Gateway</text>
+  <text x="520" y="115" text-anchor="middle" class="subtitle">FastAPI</text>
+  <text x="520" y="130" text-anchor="middle" class="subtitle">Uvicorn</text>
+  <text x="520" y="145" text-anchor="middle" class="subtitle">Python</text>
+
+  <path d="M390 115 L440 115" class="arrow"/>
+
+  <!-- PgBouncer -->
+  <rect x="650" y="70" width="160" height="100" class="service"/>
+  <text x="730" y="95" text-anchor="middle" class="label" font-weight="bold" font-size="14">Connection Pool</text>
+  <text x="730" y="115" text-anchor="middle" class="subtitle">PgBouncer</text>
+  <text x="730" y="130" text-anchor="middle" class="subtitle">Port: 6432</text>
+  <text x="730" y="145" text-anchor="middle" class="subtitle">SCRAM-SHA-256</text>
+
+  <path d="M600 115 L650 115" class="arrow"/>
+
+  <!-- Database -->
+  <rect x="650" y="230" width="160" height="90" class="db"/>
+  <text x="730" y="260" text-anchor="middle" class="label" font-weight="bold" font-size="14">Database</text>
+  <text x="730" y="280" text-anchor="middle" class="subtitle">PostgreSQL 16</text>
+  <text x="730" y="295" text-anchor="middle" class="subtitle">Database: prod_DB</text>
+  <text x="730" y="310" text-anchor="middle" class="subtitle">User: admin</text>
+
+  <path d="M730 170 L730 230" class="arrow"/>
+
+  <!-- pgAdmin -->
+  <rect x="440" y="230" width="150" height="90" class="admin"/>
+  <text x="515" y="260" text-anchor="middle" class="label" font-weight="bold" font-size="14">Admin UI</text>
+  <text x="515" y="280" text-anchor="middle" class="subtitle">pgAdmin4</text>
+  <text x="515" y="295" text-anchor="middle" class="subtitle">Port: 8888</text>
+  <text x="515" y="310" text-anchor="middle" class="subtitle">Email: apote@sm.com</text>
+
+  <path d="M515 170 L515 230" class="arrow" stroke-dasharray="5,5"/>
+
+  <!-- Data Flow Box -->
+  <rect x="50" y="370" width="800" height="200" rx="8" fill="#fff" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="450" y="395" text-anchor="middle" class="label" font-weight="bold" font-size="14">Data Flow &amp; Communication</text>
+
+  <text x="90" y="435" class="subtitle">1. User accesses via browser</text>
+  <text x="90" y="455" class="subtitle">2. Next.js serves frontend</text>
+  <text x="90" y="475" class="subtitle">3. API calls to FastAPI</text>
+  <text x="90" y="495" class="subtitle">4. PgBouncer manages connections</text>
+  <text x="90" y="515" class="subtitle">5. PostgreSQL stores data</text>
+
+  <text x="400" y="435" class="subtitle" font-weight="bold">Ports:</text>
+  <text x="400" y="455" class="subtitle">Frontend: localhost:3000</text>
+  <text x="400" y="475" class="subtitle">Backend: localhost:5000</text>
+  <text x="400" y="495" class="subtitle">PgBouncer: localhost:6432</text>
+  <text x="400" y="515" class="subtitle">pgAdmin: localhost:8888</text>
+
+  <text x="680" y="435" class="subtitle" font-weight="bold">DB Credentials:</text>
+  <text x="680" y="455" class="subtitle">User: admin</text>
+  <text x="680" y="475" class="subtitle">Password: admin</text>
+  <text x="680" y="495" class="subtitle">DB Name: prod_DB</text>
+
+  <!-- Legend at bottom right -->
+  <text x="750" y="620" class="label" font-weight="bold" font-size="11">Legend:</text>
+  <rect x="750" y="630" width="16" height="16" class="client" stroke="none"/>
+  <text x="772" y="642" class="subtitle" font-size="11">Client</text>
+  <rect x="750" y="650" width="16" height="16" class="service" stroke="none"/>
+  <text x="772" y="662" class="subtitle" font-size="11">Service</text>
+  <rect x="750" y="670" width="16" height="16" class="db" stroke="none"/>
+  <text x="772" y="682" class="subtitle" font-size="11">Database</text>
+  <rect x="820" y="650" width="16" height="16" class="admin" stroke="none"/>
+  <text x="842" y="662" class="subtitle" font-size="11">Admin</text>
+</svg>
